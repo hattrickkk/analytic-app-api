@@ -6,7 +6,6 @@ import {
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserDto } from '../users/dto/login-user.dto';
 import { PrismaService } from '@/utils/prisma/prisma.service';
 import { PasswordService } from '@/utils/password/password.service';
 import { Response, Request } from 'express';
