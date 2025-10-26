@@ -1,0 +1,32 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Проверка кода из репозитория
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Установка Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # 3. Установка зависимостей
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # 5. Сборка проекта
+      - name: Build
+        run: yarn build
