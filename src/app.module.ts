@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtGuard } from '@/modules/auth/helpers/jwt.guard';
-import { JwtStrategy } from '@/modules/auth/helpers/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './modules/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtGuard } from './guards/jwt.guard';
 
 @Module({
-  imports: [AuthModule, UsersModule, ConfigModule.forRoot({ isGlobal: true })],
+  imports: [UsersModule, ConfigModule.forRoot({ isGlobal: true }), AuthModule],
   controllers: [AppController],
   providers: [
     AppService,
@@ -17,7 +16,6 @@ import { ConfigModule } from '@nestjs/config';
       provide: APP_GUARD,
       useClass: JwtGuard,
     },
-    JwtStrategy,
   ],
 })
 export class AppModule {}

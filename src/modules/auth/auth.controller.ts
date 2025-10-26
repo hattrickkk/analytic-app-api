@@ -1,11 +1,22 @@
-import { Controller, Post, UseGuards, Request, Get } from '@nestjs/common';
+import {
+  Body,
+  Res,
+  Req,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import type { Response, Request } from 'express';
 import { Public } from '@/decorators/public';
-import { AuthGuard } from '@nestjs/passport';
+import { LocalGuard } from '@/guards/local.guard';
+import { User } from '../users/entities/user.entity';
 
 export interface RequestWithUser extends Request {
-  user: { id: number; username: string }; 
+  user: User;
 }
 
 @Public()
@@ -13,10 +24,28 @@ export interface RequestWithUser extends Request {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  register(
+    @Res({ passthrough: true }) res: Response,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    return this.authService.register(res, createUserDto);
+  }
+
   @Post('login')
-  login(@Request() req: RequestWithUser) {
-    const { username, id } = req.user;
-    return this.authService.login({ username, id });
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(LocalGuard)
+  login(
+    @Req() req: RequestWithUser,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.login(res, req.user);
+  }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    return this.authService.refresh(res, req);
   }
 }

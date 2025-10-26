@@ -1,17 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsInt,
-  IsOptional,
-  IsString,
-  MinLength,
-  IsNotEmpty,
-} from 'class-validator';
+import { IsString, MinLength, IsNotEmpty } from 'class-validator';
 
-export class CreateUserDto {
+export class LoginUserDto {
   constructor(username: string, password: string, roleId: number = 0) {
     this.username = username;
     this.password = password;
-    this.roleId = roleId;
   }
 
   @ApiProperty({ example: 'admin', description: 'Имя пользователя' })
@@ -29,8 +22,4 @@ export class CreateUserDto {
     message: 'Password must be at least 6 characters long.',
   })
   password: string;
-
-  @IsInt()
-  @IsOptional()
-  roleId: number;
 }

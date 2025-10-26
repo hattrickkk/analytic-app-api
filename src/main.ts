@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,12 +12,22 @@ async function bootstrap() {
     allowedHeaders: 'Authorization, Content-Type',
   });
 
+  app.use(cookieParser());
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // whitelist: true, // удаляет лишние поля
+      // forbidNonWhitelisted: true, // выбрасывает 400, если пришли поля не из DTO
+      // transform: true, // преобразует типы (строка → число)
+    }),
+  );
+
   // Настройка Swagger
   const config = new DocumentBuilder()
     .setTitle('API Example')
     .setDescription('Документация API')
     .setVersion('1.0')
-    // .addBearerAuth() // если используешь JWT
+    // .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
