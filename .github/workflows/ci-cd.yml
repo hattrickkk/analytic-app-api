@@ -14,7 +14,8 @@ jobs:
 
     env:
       NODE_ENV: production
-      DATABASE_URL: ${{ secrets.SUPABASE_PROD_DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DIRECT_URL: ${{ secrets.DIRECT_URL }}
 
     steps:
       # 1. Проверка кода из репозитория
@@ -35,10 +36,6 @@ jobs:
       - name: Apply Prisma migrations
         run: npx prisma migrate deploy
 
-      # 6. Сборка проекта
+      # 5. Сборка проекта
       - name: Build
         run: yarn build
-
-      # 7. Деплой приложения (пример для Vercel, Heroku или кастомного сервера)
-      # - name: Deploy
-      #   run: your-deploy-command-here

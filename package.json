@@ -5,28 +5,18 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
-"scripts": {
-  "build": "nest build",
-  "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-  "start": "nest start",
-  "start:dev": "nest start --watch",
-  "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-
-  // Для локальной разработки: сброс + миграции + seed
-  "prisma:dev:reset": "cross-env npx prisma migrate reset --force && npx prisma db seed",
-
-  // Создание миграций для dev
-  "prisma:dev:migrate": "cross-env npx prisma migrate dev --name migration_%DATE%",
-
-  // Безопасный запуск миграций на prod / staging
-  "prisma:migrate:deploy": "cross-env npx prisma migrate deploy",
-
-  // Seed для prod / staging (опционально)
-  "prisma:seed": "ts-node ./prisma/seeds/seed.ts",
-
-  // Удобная команда для dev: сброс + миграции + seed
-  "prisma:dev": "yarn prisma:dev:reset && yarn prisma:dev:migrate"
-},
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "prisma:dev:reset": "cross-env npx prisma migrate reset --force && npx prisma db seed",
+    "prisma:dev:migrate": "cross-env npx prisma migrate dev --name migration_%DATE%",
+    "prisma:migrate:deploy": "cross-env npx prisma migrate deploy",
+    "prisma:seed": "ts-node ./prisma/seeds/seed.ts",
+    "prisma:dev": "yarn prisma:dev:reset && yarn prisma:dev:migrate"
+  },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
