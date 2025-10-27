@@ -28,6 +28,8 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
     "@prisma/client": "^6.17.0",
+    "@vercel/node": "^5.5.0",
+    "aws-serverless-express": "^3.4.0",
     "bcrypt": "^6.0.0",
     "class-validator": "^0.14.2",
     "cookie-parser": "^1.4.7",
