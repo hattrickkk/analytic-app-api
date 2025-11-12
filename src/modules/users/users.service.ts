@@ -4,9 +4,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { User, UserWithPassword } from './entities/user.entity';
+import { User, UserResponse, UserWithPassword } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PasswordService } from '@/utils/password/password.service';
+import { DEFAULT_FIND_USER_OPTIONS } from './constants';
 
 @Injectable()
 export class UsersService {
@@ -19,15 +20,20 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async getUserById(userId: number): Promise<UserWithPassword | null> {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+  async getUserById(userId: number): Promise<UserResponse | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      ...DEFAULT_FIND_USER_OPTIONS,
+    });
     if (!user) throw new NotFoundException('User wasnot found');
-
-    return this.prisma.user.findUnique({ where: { id: userId } });
+    return user;
   }
 
-  async getUserByUsername(username: string): Promise<UserWithPassword | null> {
-    return this.prisma.user.findUnique({ where: { username } });
+  async getUserByUsername(username: string): Promise<UserResponse | null> {
+    return this.prisma.user.findUnique({
+      where: { username },
+      ...DEFAULT_FIND_USER_OPTIONS,
+    });
   }
 
   async createUser(data: CreateUserDto): Promise<User | null> {
@@ -43,7 +49,6 @@ export class UsersService {
       data: {
         ...data,
         password: hashedPassword,
-        roleId: data.roleId || 1,
       },
     });
 

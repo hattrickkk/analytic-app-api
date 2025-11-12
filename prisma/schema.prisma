@@ -14,8 +14,12 @@ model User {
   email     String?   @unique
   username      String @unique
   password  String
-  role      Role     @relation(fields: [roleId], references: [id])
-  roleId    Int
+
+  isAdmin Boolean?
+
+  teacherId Int?      @unique            
+  teacher   Teacher? @relation("UserTeacher", fields: [teacherId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -23,12 +27,109 @@ model User {
   @@schema("reference") 
 }
 
-model Role {
-  id    Int     @id @default(autoincrement())
-  name  String  @unique
-  code  String  @unique
-  users User[]
+model Position {
+  id       Int       @id @default(autoincrement())
+  name     String     @unique    
+  code     String?     
+  teachers Teacher[]
 
-  @@map("roles")
-  @@schema("reference")  
+  WorkNorms WorkNorm[]
+
+  @@map("positions")
+  @@schema("reference")
+}
+
+
+model Teacher {
+  id         Int        @id @default(autoincrement())
+  firstName   String
+  lastName String
+  patronymic String
+
+  positionId Int
+  position   Position   @relation(fields: [positionId], references: [id])
+
+  user       User?      @relation("UserTeacher")
+
+  rate       Float      @default(1.0)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  workloads WorkLoad[]
+  workloadPlans WorkloadPlan[]
+
+  @@map("teachers")
+  @@schema("reference")
+}
+
+model WorkLoadType {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+
+  workloads WorkLoad[]
+  workNorms WorkNorm[]
+  
+  @@map("workload_types")
+  @@schema("reference")
+}
+
+model WorkLoad {
+  id        Int          @id @default(autoincrement())
+
+  teacherId Int
+  teacher   Teacher      @relation(fields: [teacherId], references: [id])
+
+  typeId    Int
+  type      WorkLoadType @relation(fields: [typeId], references: [id])
+
+  subjectId    Int
+  subject      Subject @relation(fields: [subjectId], references: [id])
+
+  hours     Float
+
+  year String
+
+  @@map("workloads")
+  @@schema("public")
+}
+
+model Subject {
+  id        Int          @id @default(autoincrement())
+
+  name String @unique
+  hours     Float
+
+  workloads WorkLoad[]
+
+  @@map("subjects")
+  @@schema("reference")
+}
+
+model WorkNorm {
+  id           Int          @id @default(autoincrement())
+  typeId       Int
+  type         WorkLoadType @relation(fields: [typeId], references: [id])
+
+  year         String
+  rate         Float
+  hours        Float
+
+  positionId   Int?
+  position     Position?    @relation(fields: [positionId], references: [id])
+
+  @@unique([typeId, year, rate, positionId])
+  @@map("work_norms")
+  @@schema("reference")
+}
+
+model WorkloadPlan {
+  id         Int      @id @default(autoincrement())
+  teacherId  Int
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+
+  year       String
+  plannedHours Float
+
+  @@map("workload_plans")
+  @@schema("public")
 }
