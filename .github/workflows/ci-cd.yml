@@ -34,10 +34,11 @@ jobs:
       - name: Generate Prisma Client
         run: yarn prisma generate
 
-      # 4. Применение миграций на продакшн базе
       - name: Apply Prisma migrations
         run: npx prisma migrate deploy
 
-      # 5. Сборка проекта
+      - name: Seed database
+        run: npx ts-node prisma/seeds/seed.ts
+
       - name: Build
         run: yarn build
