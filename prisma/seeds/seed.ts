@@ -15,6 +15,7 @@ const prisma = new PrismaClient();
 async function main() {
   await prisma.position.createMany({
     data: POSITIONS,
+    skipDuplicates: true,
   });
 
   const usersWithHashedPasswords = await Promise.all(
@@ -26,14 +27,17 @@ async function main() {
 
   await prisma.user.createMany({
     data: usersWithHashedPasswords,
+    skipDuplicates: true,
   });
 
   await prisma.workLoadType.createMany({
     data: WORKLOAD_TYPES,
+    skipDuplicates: true,
   });
 
   await prisma.subject.createMany({
     data: SUBJECTS,
+    skipDuplicates: true,
   });
 
   // 3. Insert teachers and connect to users
@@ -54,14 +58,17 @@ async function main() {
 
   await prisma.workLoad.createMany({
     data: WORKLOADS,
+    skipDuplicates: true,
   });
 
   await prisma.workloadPlan.createMany({
     data: WORKLOAD_PLANS,
+    skipDuplicates: true,
   });
 
   await prisma.workNorm.createMany({
     data: WORKLOAD_NORMS,
+    skipDuplicates: true,
   });
 
   console.log('Seed completed!');

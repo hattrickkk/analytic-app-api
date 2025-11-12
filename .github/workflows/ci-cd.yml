@@ -17,25 +17,22 @@ jobs:
       DIRECT_URL: ${{ secrets.DIRECT_URL }}
 
     steps:
-      # 1. Проверка кода из репозитория
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Установка Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      # 3. Установка зависимостей
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Generate Prisma Client
-        run: yarn prisma generate
-
       - name: Apply Prisma migrations
         run: npx prisma migrate deploy
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
 
       - name: Seed database
         run: npx ts-node prisma/seeds/seed.ts
