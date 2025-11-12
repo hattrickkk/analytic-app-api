@@ -37,6 +37,8 @@ async function bootstrap() {
     // .addBearerAuth()
     .build();
 
+  app.enableShutdownHooks();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document); // http://localhost:3000/api
 
