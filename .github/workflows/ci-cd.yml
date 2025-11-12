@@ -17,25 +17,33 @@ jobs:
       DIRECT_URL: ${{ secrets.DIRECT_URL }}
 
     steps:
+      # 1. Забираем код
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. Ставим Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
+      # 3. Устанавливаем зависимости
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Apply Prisma migrations
-        run: npx prisma migrate deploy
-
+      # 4. Генерируем Prisma Client
+      # (обязательно до миграций!)
       - name: Generate Prisma Client
         run: npx prisma generate
 
+      # 5. Применяем миграции
+      - name: Apply Prisma migrations
+        run: npx prisma migrate deploy
+
+      # 6. Сидим базу (опционально)
       - name: Seed database
         run: npx ts-node prisma/seeds/seed.ts
 
+      # 7. Собираем проект
       - name: Build
         run: yarn build
