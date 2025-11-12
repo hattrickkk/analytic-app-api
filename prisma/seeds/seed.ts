@@ -38,7 +38,7 @@ async function main() {
 
   // 3. Insert teachers and connect to users
   for (const teacher of TEACHERS) {
-    await prisma.teacher.create({
+    const createdTeacher = await prisma.teacher.create({
       data: {
         firstName: teacher.firstName,
         lastName: teacher.lastName,

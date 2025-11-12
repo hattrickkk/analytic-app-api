@@ -13,10 +13,9 @@
     "start:dev": "nest start --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prisma:dev:reset": "cross-env npx prisma migrate reset --force && npx prisma db seed",
-    "prisma:dev:migrate": "cross-env npx prisma migrate dev --name migration_%DATE%",
+    "prisma:dev:migrate": "cross-env npx prisma migrate dev --name init",
     "prisma:migrate:deploy": "cross-env npx prisma migrate deploy",
-    "prisma:seed": "ts-node ./prisma/seeds/seed.ts",
-    "prisma:dev": "yarn prisma:dev:reset && yarn prisma:dev:migrate"
+    "prisma:seed": "ts-node ./prisma/seeds/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
