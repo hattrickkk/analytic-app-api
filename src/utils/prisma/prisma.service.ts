@@ -9,8 +9,9 @@ export class PrismaService
   async onModuleInit() {
     try {
       await this.$connect();
-    } catch (error) {
-      throw error;
+      console.log('Prisma connected!');
+    } catch (e) {
+      console.error('Prisma connection failed:', e.message);
     }
   }
 
